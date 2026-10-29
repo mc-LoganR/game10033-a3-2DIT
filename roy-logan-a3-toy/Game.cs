@@ -2,6 +2,8 @@
 using System;
 using System.Numerics;
 using System.Resources;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 
 // The namespace your code is in.
 namespace MohawkGame2D
@@ -9,6 +11,52 @@ namespace MohawkGame2D
     /// <summary>
     ///     Your game code goes inside this class!
     /// </summary>
+    /// 
+
+    //Classes
+    public class Watermelon()
+    {
+        // Public Variables
+        public Color rind;
+        public float x;
+        public float y;
+
+        public void Update()
+        {
+            // Watermelon template
+            Draw.FillColor = rind;
+            Draw.Ellipse(x, y, 140, 90);
+        }
+    }
+
+    public class Banana()
+    {
+        // Public Variables
+        public Color skin;
+        public float x;
+        public float y;
+
+        public void Update()
+        {
+            // Banana template
+            Draw.FillColor = skin;
+            // IMPORTANT: Turn this into banana shape Draw.Arc();
+        }
+    }
+    public class Orange()
+    {
+        // Public Variables
+        public Color peel;
+        public float x;
+        public float y;
+
+        public void Update()
+        {
+            // Orange template
+            Draw.FillColor = peel;
+            Draw.Circle(0, 0, 20);
+        }
+    }
     public class Game
     {
         /// <summary>
@@ -16,8 +64,16 @@ namespace MohawkGame2D
         /// </summary>
         ///
 
+        // Variables for player control
         float positionX;
         float positionY;
+
+        // Fruit Colors
+        Color watermelonGreen = new Color(31, 132, 0);
+        Color bananaYellow = new Color(225, 225, 0);
+        Color orangeOrange = new Color(242, 133, 0);
+        Color badRed = new Color(132, 2, 0);
+
         public void Setup()
         {
             // Window
@@ -29,6 +85,7 @@ namespace MohawkGame2D
         /// <summary>
         ///     Update runs every frame.
         /// </summary>
+        
         public void Update()
         {
             // Dark brown background
@@ -37,8 +94,42 @@ namespace MohawkGame2D
             // Variables
             float inputX = 0;
             float inputY = 0;
+            float speed = 200;
             int ranNumber = Random.Integer(10);
 
+            // Good fruit initalizes
+            /// Watermelon 
+            Watermelon goodMelon = new Watermelon();
+            goodMelon.rind = watermelonGreen;
+            goodMelon.Update();
+
+            /// Banana
+            Banana goodBanana = new Banana();
+            goodBanana.skin = bananaYellow;
+            goodBanana.Update();
+
+            /// Orange
+            Orange goodOrange = new Orange();
+            goodOrange.peel = orangeOrange;
+            goodOrange.Update();
+
+            // Bad fruit initalizes
+            /// Watermelon
+            Watermelon badMelon = new Watermelon();
+            badMelon.rind = badRed;
+            badMelon.Update();
+
+            /// Banana
+            Banana badBanana = new Banana();
+            badBanana.skin = badRed;
+            badBanana.Update();
+
+            /// Orange
+            Orange badOrange = new Orange();
+            badOrange.peel = badRed;
+            badOrange.Update();
+
+            // WASD controls
             // Up
             if (Input.IsKeyboardKeyDown(KeyboardKey.Up) || Input.IsKeyboardKeyDown(KeyboardKey.W))
             {
@@ -63,12 +154,12 @@ namespace MohawkGame2D
                 inputX += 1;
             }
 
-            // Moves on x-axis 200px per second
-            positionX += inputX * 200 * Time.DeltaTime;
-            // Moves on y-axis 250px per second
-            positionY += inputY * 250 * Time.DeltaTime;
+            // Moves on x-axis 300px per second
+            positionX += inputX * 300 * Time.DeltaTime;
+            // Moves on y-axis 300px per second
+            positionY += inputY * 300 * Time.DeltaTime;
 
-            // Sword drawing follows WASD
+            // Sword drawing moves with WASD
             // Sword changes on left-click
             if (Input.IsMouseButtonDown(MouseButton.Left) == false)
             {
@@ -101,8 +192,6 @@ namespace MohawkGame2D
                 // Hilt
                 Draw.SetFillColor(Color.Black);
                 Draw.Rectangle(positionX, positionY + 85, 30, 40);
-
-
             }
         }
     }
