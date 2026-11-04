@@ -3,6 +3,7 @@ using System;
 using System.Numerics;
 using System.Resources;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
 // The namespace your code is in.
@@ -29,34 +30,6 @@ namespace MohawkGame2D
         }
     }
 
-    public class Banana()
-    {
-        // Public Variables
-        public Color skin;
-        public float x;
-        public float y;
-
-        public void Update()
-        {
-            // Banana template
-            Draw.FillColor = skin;
-            // IMPORTANT: Turn this into banana shape Draw.Arc();
-        }
-    }
-    public class Orange()
-    {
-        // Public Variables
-        public Color peel;
-        public float x;
-        public float y;
-
-        public void Update()
-        {
-            // Orange template
-            Draw.FillColor = peel;
-            Draw.Circle(0, 0, 20);
-        }
-    }
     public class Game
     {
         /// <summary>
@@ -68,11 +41,13 @@ namespace MohawkGame2D
         float positionX;
         float positionY;
 
+        // Variable for object movement
+        float lrSlowMove;
+        float lrFastMove;
+        float lrRandomMove;
+
         // Fruit Colors
         Color watermelonGreen = new Color(31, 132, 0);
-        Color bananaYellow = new Color(225, 225, 0);
-        Color orangeOrange = new Color(242, 133, 0);
-        Color badRed = new Color(132, 2, 0);
 
         public void Setup()
         {
@@ -88,46 +63,53 @@ namespace MohawkGame2D
         
         public void Update()
         {
-            // Dark brown background
-            Window.ClearBackground(101, 67, 33);
+            // Cyan background
+            Window.ClearBackground(Color.Cyan);
 
-            // Variables
+            // Mouse movement variables
             float inputX = 0;
             float inputY = 0;
-            float speed = 200;
-            int ranNumber = Random.Integer(10);
 
-            // Good fruit initalizes
-            /// Watermelon 
-            Watermelon goodMelon = new Watermelon();
-            goodMelon.rind = watermelonGreen;
-            goodMelon.Update();
+            // Time variables
+            // Time in seconds between last frame and current frame
+            float deltaTime = Time.DeltaTime;
+            // Frames elapsed since system start-up
+            int framesElapsed = Time.FramesElapsed;
+            // Seconds elapsed since system start-up
+            float secondsElapsed = Time.SecondsElapsed;
 
-            /// Banana
-            Banana goodBanana = new Banana();
-            goodBanana.skin = bananaYellow;
-            goodBanana.Update();
+            // Melon movement
+            float lowSpeed = 200;
+            float highSpeed = 300;
+            int ranNumber = Random.Integer(300);
+            lrSlowMove += Time.DeltaTime * lowSpeed;
+            lrFastMove += Time.DeltaTime * highSpeed;
+            lrRandomMove += Time.DeltaTime * ranNumber;
 
-            /// Orange
-            Orange goodOrange = new Orange();
-            goodOrange.peel = orangeOrange;
-            goodOrange.Update();
+            /// Watermelon initializes
+            Watermelon goodMelon1 = new Watermelon();
+            goodMelon1.rind = watermelonGreen;
+            goodMelon1.x = lrSlowMove + 5;
+            goodMelon1.y = 50;
+            goodMelon1.Update();
 
-            // Bad fruit initalizes
-            /// Watermelon
-            Watermelon badMelon = new Watermelon();
-            badMelon.rind = badRed;
-            badMelon.Update();
+            Watermelon goodMelon2 = new Watermelon();
+            goodMelon2.rind = watermelonGreen;
+            goodMelon2.x = lrFastMove;
+            goodMelon2.y = 200;
+            goodMelon2.Update();
 
-            /// Banana
-            Banana badBanana = new Banana();
-            badBanana.skin = badRed;
-            badBanana.Update();
+            Watermelon goodMelon3 = new Watermelon();
+            goodMelon3.rind = watermelonGreen;
+            goodMelon3.x = lrRandomMove;
+            goodMelon3.y = 350;
+            goodMelon3.Update();
 
-            /// Orange
-            Orange badOrange = new Orange();
-            badOrange.peel = badRed;
-            badOrange.Update();
+            Watermelon goodMelon4 = new Watermelon();
+            goodMelon4.rind = watermelonGreen;
+            goodMelon4.x = lrRandomMove;
+            goodMelon4.y = 500;
+            goodMelon4.Update();
 
             // WASD controls
             // Up
@@ -195,5 +177,4 @@ namespace MohawkGame2D
             }
         }
     }
-
 }
