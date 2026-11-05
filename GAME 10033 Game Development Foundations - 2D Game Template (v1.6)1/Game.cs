@@ -1,5 +1,6 @@
 ﻿// Include the namespaces (code libraries) you need below.
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Resources;
 using System.Runtime.CompilerServices;
@@ -29,6 +30,19 @@ namespace MohawkGame2D
             Draw.Ellipse(x, y, 140, 90);
         }
     }
+    public class Orange()
+    {
+        public Color peel;
+        public float x;
+        public float y;
+
+        public void Update()
+        {
+            // Orange template
+            Draw.FillColor = peel;
+            Draw.Circle(x, y, 20);
+        }
+    }
 
     public class Game
     {
@@ -37,17 +51,17 @@ namespace MohawkGame2D
         /// </summary>
         ///
 
+        float x;
+        float speed = 200;
+
         // Variables for player control
         float positionX;
         float positionY;
-
-        // Variable for object movement
-        float lrSlowMove;
-        float lrFastMove;
-        float lrRandomMove;
+        int radius = 20;
 
         // Fruit Colors
         Color watermelonGreen = new Color(31, 132, 0);
+        Color orangeOrange = new Color(242, 133, 0);
 
         public void Setup()
         {
@@ -60,7 +74,7 @@ namespace MohawkGame2D
         /// <summary>
         ///     Update runs every frame.
         /// </summary>
-        
+
         public void Update()
         {
             // Cyan background
@@ -73,43 +87,84 @@ namespace MohawkGame2D
             // Time variables
             // Time in seconds between last frame and current frame
             float deltaTime = Time.DeltaTime;
+
             // Frames elapsed since system start-up
             int framesElapsed = Time.FramesElapsed;
+
             // Seconds elapsed since system start-up
             float secondsElapsed = Time.SecondsElapsed;
 
-            // Melon movement
-            float lowSpeed = 200;
-            float highSpeed = 300;
-            int ranNumber = Random.Integer(300);
-            lrSlowMove += Time.DeltaTime * lowSpeed;
-            lrFastMove += Time.DeltaTime * highSpeed;
-            lrRandomMove += Time.DeltaTime * ranNumber;
+            // Melon movementw
+            float highSpeed = 175;
+            int ranNumber = Random.Integer(200);
+
+            // Checks when object reachs window
+            if (x - radius > Window.Width)
+            {
+                // X resets
+                x = -radius;
+            }
+
+            x += Time.DeltaTime * speed;
 
             /// Watermelon initializes
-            Watermelon goodMelon1 = new Watermelon();
-            goodMelon1.rind = watermelonGreen;
-            goodMelon1.x = lrSlowMove + 5;
-            goodMelon1.y = 50;
-            goodMelon1.Update();
+            Watermelon topMelon = new Watermelon
+            {
+                rind = watermelonGreen,
+                x = x + highSpeed,
+                y = 100
+            };
+            topMelon.Update();
 
-            Watermelon goodMelon2 = new Watermelon();
-            goodMelon2.rind = watermelonGreen;
-            goodMelon2.x = lrFastMove;
-            goodMelon2.y = 200;
-            goodMelon2.Update();
+            Watermelon midMelon = new Watermelon
+            {
+                rind = watermelonGreen,
+                x = x + 80,
+                y = 250
+            };
+            midMelon.Update();
 
-            Watermelon goodMelon3 = new Watermelon();
-            goodMelon3.rind = watermelonGreen;
-            goodMelon3.x = lrRandomMove;
-            goodMelon3.y = 350;
-            goodMelon3.Update();
+            Watermelon lowMelon = new Watermelon
+            {
+                rind = watermelonGreen,
+                x = x + 50,
+                y = 450
+            };
+            lowMelon.Update();
 
-            Watermelon goodMelon4 = new Watermelon();
-            goodMelon4.rind = watermelonGreen;
-            goodMelon4.x = lrRandomMove;
-            goodMelon4.y = 500;
-            goodMelon4.Update();
+            // Orange initializes
+
+            Orange leftOrange = new Orange
+            {
+                peel = orangeOrange,
+                x = 150,
+                y = x + 50
+            };
+            leftOrange.Update();
+
+            Orange midOrange1 = new Orange
+            {
+                peel = orangeOrange,
+                x = 300,
+                y = x + 180
+            };
+            midOrange1.Update();
+
+            Orange midOrange2 = new Orange
+            {
+                peel = orangeOrange,
+                x = 450,
+                y = x + highSpeed
+            };
+            midOrange2.Update();
+
+            Orange rightOrange = new Orange
+            {
+                peel = orangeOrange,
+                x = 600,
+                y = x + 120
+            };
+            rightOrange.Update();
 
             // WASD controls
             // Up
@@ -136,10 +191,10 @@ namespace MohawkGame2D
                 inputX += 1;
             }
 
-            // Moves on x-axis 300px per second
-            positionX += inputX * 300 * Time.DeltaTime;
-            // Moves on y-axis 300px per second
-            positionY += inputY * 300 * Time.DeltaTime;
+            // Moves on x-axis 400px per second
+            positionX += inputX * 400 * Time.DeltaTime;
+            // Moves on y-axis 400px per second
+            positionY += inputY * 400 * Time.DeltaTime;
 
             // Sword drawing moves with WASD
             // Sword changes on left-click
